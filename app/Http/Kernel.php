@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.age' => \App\Http\Middleware\CheckAgeUser::class, //check.age: ten middle ware
         'fake.login' => \App\Http\Middleware\FakeLoginUser::class,
-        '' => \App\Http\Middleware\FakeLoginUser::class,
+        'check.admin.login' => \App\Http\Middleware\CheckAdminLogin::class,
+        'admin.is.logined' => \App\Http\Middleware\AdminIsLogined::class,
     ];
 }
