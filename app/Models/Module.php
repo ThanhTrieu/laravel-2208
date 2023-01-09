@@ -5,25 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
+use App\Models\Action;
 
-class Role extends Model
+class Module extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'roles'; // dai dien cho bang nao
+    protected $table = 'modules';
 
     protected $fillable = [
         'name',
-        'description',
+        'slug_key',
+        'router_name',
+        'icon',
+        'parent_id',
         'status',
         'created_at',
         'updated_at',
         'deleted_at'
     ];
 
-    public function users()
+    public function actions()
     {
-        return $this->hasMany(User::class, 'role_id', 'id');
+        return $this->belongsToMany(Action::class,'action_module', 'action_id', 'module_id')->withPivot('deleted_at')->withTimestamps();
     }
 }

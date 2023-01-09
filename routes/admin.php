@@ -3,6 +3,8 @@ use Illuminate\Support\Facades\Route;
 //route cho admin
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Models\Role;
 
 Route::prefix('admin')->as('admin.')->group(function(){
     Route::get('login',[LoginController::class,'index'])
@@ -20,4 +22,6 @@ Route::prefix('admin')
     Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
     // router khac o day
     // tat ca deu bi middleware: check.admin.login xu ly
+    Route::get('roles', [RoleController::class, 'index'])->name('roles.list');
+    Route::get('create-role', [RoleController::class, 'create'])->name('roles.create');
 });
