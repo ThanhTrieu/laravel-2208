@@ -24,4 +24,6 @@ Route::prefix('admin')
     // tat ca deu bi middleware: check.admin.login xu ly
     Route::get('roles', [RoleController::class, 'index'])->name('roles.list');
     Route::get('create-role', [RoleController::class, 'create'])->name('roles.create');
+    Route::post('store', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('roles/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
 });
