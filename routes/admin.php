@@ -26,4 +26,5 @@ Route::prefix('admin')
     Route::get('create-role', [RoleController::class, 'create'])->name('roles.create');
     Route::post('store', [RoleController::class, 'store'])->name('roles.store');
     Route::get('roles/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::post('roles/update/{id}', [RoleController::class, 'update'])->name('roles.update');
 });

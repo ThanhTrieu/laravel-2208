@@ -8,6 +8,7 @@ use App\Models\Action;
 use App\Models\Module;
 use App\Models\Role;
 use App\Http\Requests\RoleStorePost;
+use App\Http\Requests\RoleUpdatePost;
 use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
@@ -21,22 +22,9 @@ class RoleController extends Controller
 
     public function create()
     {
-        /*
-            [
-                ['module_id' => 1, 'module_name' => 'QLHV', 'actions' => [[],[],[]]],
-                [],
-            ];
-        */
         $actions = Action::all()->toArray();
         $modules = Module::all()->toArray();
- 
-        foreach($modules as $key => $m){
-            foreach($actions as $a){
-                $modules[$key]['actions'][] = $a;
-            }
-        }
-        //return view('admin.roles.create',compact('modules'));
-        //dd($modules);
+
         return view('admin.roles.create',[
             'modules' => $modules,
             'countActions' => count($actions),
@@ -79,20 +67,39 @@ class RoleController extends Controller
             }
         }
 
-        return redirect()->back()->with(CREATE_ACTION_SUCCESS_LABEL, CREATE_ACTION_SUCCESS);
+        return redirect()->route('admin.roles.list')->with(CREATE_ACTION_SUCCESS_LABEL, CREATE_ACTION_SUCCESS);
     }
 
     public function edit(Request $request)
     {
-        //dd($request->id);
         $roleId = $request->id;
         $roleId = is_numeric($roleId) ? $roleId : 0;
 
         $infoRole = Role::find($roleId);
         if(!empty($infoRole)){
+            $actions = Action::all()->toArray();
+            $modules = Module::all()->toArray();
 
+            $moduleActionId = DB::table('roles AS r')->select('ac.action_id', 'ac.module_id')
+                ->join('role_action_module AS ram', 'r.id', '=', 'ram.role_id')
+                ->join('action_module AS ac', 'ram.action_module_id', '=', 'ac.id')
+                ->where('r.id', $roleId)
+                ->get();
+            $arrModuleActionId = json_decode(json_encode( $moduleActionId), true);
+
+            return view('admin.roles.edit',compact(
+                'infoRole',
+                'actions',
+                'modules',
+                'arrModuleActionId'
+            ));
         } else {
-            
+            return view('admin.errors.404');
         }
+    }
+
+    public function update(RoleUpdatePost $request)
+    {
+        
     }
 }

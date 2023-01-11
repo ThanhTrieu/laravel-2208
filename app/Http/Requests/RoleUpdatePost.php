@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
-class RoleStorePost extends FormRequest
+class RoleUpdatePost extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,14 +22,16 @@ class RoleStorePost extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
+        $id = $request->id;
+        $id = is_numeric($id) ? $id : 0;
+
         return [
-            'name' => 'required|unique:roles,name',
+            'name' => 'required|unique:roles,name,'.$id,
             'permissions' => 'required'
         ];
     }
-
     public function messages()
     {
         return [
